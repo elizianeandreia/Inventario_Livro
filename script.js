@@ -1,12 +1,27 @@
 document.addEventListener("DOMContentLoaded", function () {
 
- 
+    function formatarData(dataISO) {
+        const partes = dataISO.split("-");
+        return `${partes[2]}/${partes[1]}/${partes[0]}`; 
+    }
+
     function carregarTabela() {
         var livros = JSON.parse(localStorage.getItem("livros") || "[]");
         var tabela = document.querySelector("table tbody");
+        tabela.innerHTML = ""; 
         livros.forEach(function (livro) {
             var novaLinha = document.createElement("tr");
-            novaLinha.innerHTML = "<td>" + livro.id + "</td><td>" + livro.titulo + "</td><td>" + livro.autor + "</td><td><button class='editar'>Editar</button></td><td><button class='excluir'>Excluir</button></td>";
+            novaLinha.innerHTML = `
+                <td>${livro.id}</td>
+                <td>${livro.titulo}</td>
+                <td>${livro.autor}</td>
+                <td>${livro.data}</td>
+                <td>${livro.genero}</td>
+                <td>
+                    <button class="editar">Editar</button>
+                    <button class="excluir">Excluir</button>
+                </td>
+            `;
             tabela.appendChild(novaLinha);
         });
     }
@@ -97,4 +112,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     carregarTabela();
 });
+
+document.getElementById("limparStorage").addEventListener("click", function () {
+    if (confirm("Tem certeza que deseja apagar todos os livros do inventário?")) {
+        localStorage.removeItem("livros");
+
+    
+        const tabela = document.querySelector("table tbody");
+        tabela.innerHTML = "";
+
+        alert("Inventário apagado com sucesso!");
+    }
+});
+
+
 
